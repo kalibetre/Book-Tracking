@@ -1,0 +1,3 @@
+class BookNotFoundException(Exception):
+    pass
+
