@@ -1,10 +1,12 @@
 "use client";
+import { useBooks } from "@/hooks/useBooks";
 import AddIcon from "@/icons/AddIcon";
 import React, { useState } from "react";
 
 const NewBookForm = () => {
   const [bookTitle, setBookTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const { addNewBook } = useBooks();
 
   const handleBookTitleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -25,6 +27,7 @@ const NewBookForm = () => {
       return;
     }
     setError(null);
+    addNewBook(bookTitle);
   };
 
   return (
