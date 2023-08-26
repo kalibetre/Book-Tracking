@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import MenuItem from "./MenuItem";
 import { CategoryLevel } from "./BookCategory";
 import { useBooks } from "@/hooks/useBooks";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export type BookItem = {
@@ -99,7 +99,6 @@ const Book = (props: BookProps) => {
           </ul>
         </>
       )}
-      <ToastContainer />
     </div>
   );
 };

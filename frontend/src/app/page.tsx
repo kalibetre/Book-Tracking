@@ -1,5 +1,6 @@
 import Books from "@/components/Books";
 import NewBookForm from "@/components/NewBookForm";
+import { ToastContainer } from "react-toastify";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       <div className="mx-10 flex w-full flex-col justify-center gap-4 sm:flex-row">
         <Books />
       </div>
+      <ToastContainer />
     </main>
   );
 }

@@ -2,7 +2,7 @@
 import { useBooks } from "@/hooks/useBooks";
 import AddIcon from "@/icons/AddIcon";
 import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const NewBookForm = () => {
@@ -67,7 +67,6 @@ const NewBookForm = () => {
           </div>
         </div>
       )}
-      <ToastContainer />
     </form>
   );
 };
