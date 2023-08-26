@@ -1,17 +1,22 @@
 from typing import List
 import uuid
 from fastapi import Depends, FastAPI, HTTPException, status
+from app.db.util import get_db_connection
 from app.models.book import Book, BookUpdateRequest, NewBookRequest
-from app.repositories.dbrepository import DBRepository
+from app.repositories.bookrepository import BookRepository
 from app.utils.exceptions import BookNotFoundException
 from app.services.bookservice import BookService
-
 
 app = FastAPI()
 
 def get_book_service():
-    return BookService(DBRepository())
-
+    try:
+        conn = get_db_connection()
+        repository = BookRepository(connection=conn)
+        book_service = BookService(repository)
+        yield book_service
+    finally:
+        conn.close()
 
 @app.post("/books", response_model=Book, status_code=status.HTTP_201_CREATED)
 def create_book(book: NewBookRequest, book_service: BookService = Depends(get_book_service)):
