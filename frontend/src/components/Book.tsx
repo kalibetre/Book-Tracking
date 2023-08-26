@@ -25,12 +25,10 @@ const Book = (props: BookProps) => {
 
   const handleUpdate = (book: BookItem, category: CategoryLevel) => {
     updateBookCategory({ ...book, category }, showErrorMessage);
-    toast.success("The book was updated successfuly!");
   };
 
   const handleDelete = (book: BookItem) => {
     deleteBook(book, showErrorMessage);
-    toast.success("The book was deleted successfuly!");
   };
 
   const showErrorMessage = (msg: string) => {

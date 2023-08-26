@@ -30,7 +30,6 @@ const NewBookForm = () => {
     setError(null);
     addNewBook(bookTitle, showErrorMessage);
     setBookTitle("");
-    toast.success("Successfully saved your book!");
   };
 
   const showErrorMessage = (msg: string) => {
