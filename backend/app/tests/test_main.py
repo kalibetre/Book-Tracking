@@ -4,8 +4,9 @@ from fastapi.testclient import TestClient
 from fastapi import status
 from app.db.bookrepositoryimpl import BookRepositoryImpl
 from app.db.statements import BookTablePreparedStatement
-from app.main import app, get_book_service
+from app.main import app
 from app.models.book import Book
+from app.routers.bookrouter import get_book_service
 from app.services.bookservice import BookService
 
 
@@ -44,7 +45,7 @@ def prepare_db(connection: sqlite3.Connection):
 
 
 def test_create_book():
-    response = client.post("/books", json={"title": "Test Book"})
+    response = client.post("/api/v1/books", json={"title": "Test Book"})
     assert response.status_code == status.HTTP_201_CREATED
     book = response.json()
     assert book["title"] == "Test Book"    
@@ -52,23 +53,23 @@ def test_create_book():
 
 
 def test_book_with_same_title_should_not_be_allowed():
-    response = client.post("/books", json={"title": SAMPLE_BOOKS[0].title})
+    response = client.post("/api/v1/books", json={"title": SAMPLE_BOOKS[0].title})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 def test_create_book_returns_400_for_empty_title():
-    response = client.post("/books", json={"title": ""})
+    response = client.post("/api/v1/books", json={"title": ""})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 def test_get_all_books():
-    response = client.get("/books")
+    response = client.get("/api/v1/books")
     assert response.status_code == status.HTTP_200_OK
 
 
 def test_get_book():
     book_id = SAMPLE_BOOKS[0].id 
-    response = client.get(f"/books/{book_id}")
+    response = client.get(f"/api/v1/books/{book_id}")
     assert response.status_code == status.HTTP_200_OK
     book = response.json()
     assert book["id"] == str(book_id)
@@ -76,13 +77,13 @@ def test_get_book():
 
 def test_get_book_returns_404():
     book_id = uuid.uuid4()
-    response = client.get(f"/books/{book_id}")
+    response = client.get(f"/api/v1/books/{book_id}")
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 def test_update_book_title():
     book_id = SAMPLE_BOOKS[0].id
-    response = client.put(f"/books/{book_id}", json={"title": "Updated Book"})
+    response = client.put(f"/api/v1/books/{book_id}", json={"title": "Updated Book"})
     assert response.status_code == status.HTTP_200_OK
     book = response.json()
     assert book["id"] == str(book_id)
@@ -91,7 +92,7 @@ def test_update_book_title():
 
 def test_update_book_category():
     book_id = SAMPLE_BOOKS[0].id
-    response = client.put(f"/books/{book_id}", json={"category": "completed"})
+    response = client.put(f"/api/v1/books/{book_id}", json={"category": "completed"})
     assert response.status_code == status.HTTP_200_OK
     book = response.json()
     assert book["id"] == str(book_id)
