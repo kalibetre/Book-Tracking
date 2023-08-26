@@ -3,6 +3,7 @@ import OptionIcon from "@/icons/OptionIcon";
 import React, { useState } from "react";
 import MenuItem from "./MenuItem";
 import { CategoryLevel } from "./BookCategory";
+import { useBooks } from "@/hooks/useBooks";
 
 export type BookItem = {
   id: string;
@@ -15,43 +16,48 @@ type BookProps = {
   book: BookItem;
 };
 
-const moveBookToInProgress = (book: BookItem) => {
-  console.log(book);
-};
-
-const markBookAsCompleted = (book: BookItem) => {
-  console.log(book);
-};
-
-const deleteBook = (book: BookItem) => {
-  console.log(book);
-};
-
-const moveBookToWantToRead = (book: BookItem) => {
-  console.log(book);
-};
-
-const CATEGORY_MENUES = {
-  [CategoryLevel.ToRead]: [
-    { label: "Move To In Progress", onClick: moveBookToInProgress },
-    { label: "Delete", onClick: deleteBook },
-  ],
-  [CategoryLevel.InProgress]: [
-    { label: "Mark as Complete", onClick: markBookAsCompleted },
-    { label: "Move To Want To Read", onClick: moveBookToWantToRead },
-    { label: "Delete", onClick: deleteBook },
-  ],
-  [CategoryLevel.Completed]: [
-    { label: "Move To In Progress", onClick: moveBookToInProgress },
-    { label: "Delete", onClick: deleteBook },
-  ],
-};
-
 const Book = (props: BookProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { deleteBook, updateBookCategory } = useBooks();
   const { book } = props;
 
-  const menuItems = CATEGORY_MENUES[book.category].map((item) => (
+  const handleUpdate = (book: BookItem, category: CategoryLevel) => {
+    updateBookCategory({ ...book, category });
+  };
+
+  const inProgressMenuAction = {
+    label: "Move To In Progress",
+    onClick: (book: BookItem) => handleUpdate(book, CategoryLevel.InProgress),
+  };
+  const deleteMenuAction = { label: "Delete", onClick: deleteBook };
+  const markAsCompleteMenuAction = {
+    label: "Mark as Complete",
+    onClick: (book: BookItem) => handleUpdate(book, CategoryLevel.Completed),
+  };
+  const moveToWantToReadMenuAction = {
+    label: "Move To Want To Read",
+    onClick: (book: BookItem) => handleUpdate(book, CategoryLevel.ToRead),
+  };
+
+  const cateogry_menues = {
+    [CategoryLevel.ToRead]: [
+      inProgressMenuAction,
+      markAsCompleteMenuAction,
+      deleteMenuAction,
+    ],
+    [CategoryLevel.InProgress]: [
+      markAsCompleteMenuAction,
+      moveToWantToReadMenuAction,
+      deleteMenuAction,
+    ],
+    [CategoryLevel.Completed]: [
+      inProgressMenuAction,
+      moveToWantToReadMenuAction,
+      deleteMenuAction,
+    ],
+  };
+
+  const menuItems = cateogry_menues[book.category].map((item) => (
     <li key={item.label}>
       <MenuItem {...item} book={book} key={item.label} />
     </li>

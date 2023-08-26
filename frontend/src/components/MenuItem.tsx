@@ -8,6 +8,7 @@ type MenuItemProps = {
 
 const MenuItem = (props: MenuItemProps) => {
   const { book, label, onClick } = props;
+
   return (
     <button
       className="z-50 flex h-8 w-full items-center justify-start rounded-sm p-2 text-sm hover:bg-slate-100"
