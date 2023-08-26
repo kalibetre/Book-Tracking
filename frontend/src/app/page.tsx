@@ -1,5 +1,4 @@
-import Book from "@/components/Book";
-import BookCategory, { CategoryLevel } from "@/components/BookCategory";
+import Books from "@/components/Books";
 import NewBookForm from "@/components/NewBookForm";
 
 export default function Home() {
@@ -9,53 +8,7 @@ export default function Home() {
         <NewBookForm></NewBookForm>
       </div>
       <div className="mx-10 flex w-full flex-col justify-center gap-4 sm:flex-row">
-        <BookCategory level={CategoryLevel.ToRead}>
-          {[
-            "Whispers of Eternity",
-            "Chronicles of the Forgotten",
-            "Midnight's Embrace",
-          ].map((title, i) => (
-            <Book
-              book={{ id: i.toString(), title, category: CategoryLevel.ToRead }}
-              key={i}
-            />
-          ))}
-        </BookCategory>
-
-        <BookCategory level={CategoryLevel.InProgress}>
-          {[
-            "Spectrum of Dreams",
-            "Echoes in the Mist",
-            "The Celestial Paradox",
-            "Crimson Veil Conspiracy",
-          ].map((title, i) => (
-            <Book
-              book={{
-                id: i.toString(),
-                title,
-                category: CategoryLevel.InProgress,
-              }}
-              key={i}
-            />
-          ))}
-        </BookCategory>
-
-        <BookCategory level={CategoryLevel.Completed}>
-          {[
-            "Ripples of Destiny",
-            "Enigma of the Lost Cipher",
-            "Aetherial Chronicles",
-          ].map((title, i) => (
-            <Book
-              book={{
-                id: i.toString(),
-                title,
-                category: CategoryLevel.Completed,
-              }}
-              key={i}
-            />
-          ))}
-        </BookCategory>
+        <Books />
       </div>
     </main>
   );
