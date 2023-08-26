@@ -2,10 +2,10 @@ import sqlite3
 import uuid
 from fastapi.testclient import TestClient
 from fastapi import status
+from app.db.bookrepositoryimpl import BookRepositoryImpl
 from app.db.statements import BookTablePreparedStatement
 from app.main import app, get_book_service
 from app.models.book import Book
-from app.repositories.bookrepository import BookRepository
 from app.services.bookservice import BookService
 
 
@@ -13,7 +13,7 @@ def override_get_book_service():
     try:
         connection = sqlite3.connect(":memory:")
         prepare_db(connection)
-        repository = BookRepository(connection=connection, placeholder="?")
+        repository = BookRepositoryImpl(connection=connection, placeholder="?")
         book_service = BookService(repository)
         yield book_service
     finally:

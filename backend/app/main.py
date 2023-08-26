@@ -1,9 +1,9 @@
 from typing import List
 import uuid
 from fastapi import Depends, FastAPI, HTTPException, status
+from app.db.bookrepositoryimpl import BookRepositoryImpl
 from app.db.util import get_db_connection
 from app.models.book import Book, BookUpdateRequest, NewBookRequest
-from app.repositories.bookrepository import BookRepository
 from app.utils.exceptions import BookNotFoundException
 from app.services.bookservice import BookService
 
@@ -12,7 +12,7 @@ app = FastAPI()
 def get_book_service():
     try:
         conn = get_db_connection()
-        repository = BookRepository(connection=conn)
+        repository = BookRepositoryImpl(connection=conn)
         book_service = BookService(repository)
         yield book_service
     finally:
