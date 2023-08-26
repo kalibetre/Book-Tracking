@@ -1,6 +1,5 @@
 import { CategoryLevel } from "@/components/BookCategory";
-import useSWR from "swr";
-
+import useSWR, { mutate } from "swr";
 import axios from "axios";
 import { BookItem } from "@/components/Book";
 
@@ -12,25 +11,48 @@ const bookApi = axios.create({
 })
 
 export const useBooks = () => {
-    const { data, error, isLoading, mutate } = useSWR(booksUrl, axiosFetcher);
+    const { data, error, isLoading  } = useSWR(booksUrl, axiosFetcher);
 
-    const addNewBook = async (title: string) => {
-        await bookApi.post('/', { title })
-        mutate([...data, { id: data.length + 1, title, category: CategoryLevel.ToRead }])
+    const addNewBook = async (title: string, callback: (success: boolean) => void) => {
+        try {
+            mutate(booksUrl, [...data, { id: data.length + 1, title, category: CategoryLevel.ToRead }], false)
+            await bookApi.post('/', { title })
+            mutate(booksUrl)
+            callback(true)
+        } catch (error) {
+            mutate(booksUrl, data)
+            callback(false)
+        }
     }
 
-    const deleteBook = async (book: BookItem) => {
-        await bookApi.delete(`/${book.id}`)
-        mutate(data.filter((b: BookItem) => b.id !== book.id))
+    const deleteBook = async (book: BookItem, callback: (success: boolean) => void) => {
+        try {
+            mutate(booksUrl, data.filter((b: BookItem) => b.id !== book.id), {
+                rollbackOnError: true
+            })
+            await bookApi.delete(`/${book.id}`)
+            mutate(booksUrl)
+            callback(true)
+        } catch (error) {
+            mutate(booksUrl, data)
+            callback(false)
+        }
     }
 
-    const updateBookCategory = async (book: BookItem) => {
-        await bookApi.put(`/${book.id}`, { category: book.category })
-        mutate([...data.filter((b: BookItem) => b.id !== book.id), book])
+    const updateBookCategory = async (book: BookItem, callback: (success: boolean) => void) => {
+        try {
+            mutate(booksUrl, [...data.filter((b: BookItem) => b.id !== book.id), book], false)
+            await bookApi.put(`/${book.id}`, { category: book.category })
+            mutate(booksUrl)
+            callback(true)
+        } catch (error) {
+            mutate(booksUrl, data)
+            callback(false)
+        }
     }
     
     return {
-        books: data,
+        books: data || [],
         isError: error,
         isLoading,
         addNewBook,
