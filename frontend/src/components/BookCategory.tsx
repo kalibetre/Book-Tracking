@@ -1,3 +1,4 @@
+import { capitalize } from "@/utils/helpers";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -51,7 +52,7 @@ const BookCategory = (props: BookCategoryProps) => {
           pill_bg,
         )}
       >
-        {level}
+        {capitalize(level.replace("-", " "))}
       </span>
       <div className="mt-4 flex flex-wrap gap-3">{children}</div>
     </div>
