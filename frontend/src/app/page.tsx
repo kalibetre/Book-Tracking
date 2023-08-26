@@ -15,7 +15,10 @@ export default function Home() {
             "Chronicles of the Forgotten",
             "Midnight's Embrace",
           ].map((title, i) => (
-            <Book title={title} />
+            <Book
+              book={{ id: i.toString(), title, category: CategoryLevel.ToRead }}
+              key={i}
+            />
           ))}
         </BookCategory>
 
@@ -26,7 +29,14 @@ export default function Home() {
             "The Celestial Paradox",
             "Crimson Veil Conspiracy",
           ].map((title, i) => (
-            <Book title={title} />
+            <Book
+              book={{
+                id: i.toString(),
+                title,
+                category: CategoryLevel.InProgress,
+              }}
+              key={i}
+            />
           ))}
         </BookCategory>
 
@@ -36,7 +46,14 @@ export default function Home() {
             "Enigma of the Lost Cipher",
             "Aetherial Chronicles",
           ].map((title, i) => (
-            <Book title={title} />
+            <Book
+              book={{
+                id: i.toString(),
+                title,
+                category: CategoryLevel.Completed,
+              }}
+              key={i}
+            />
           ))}
         </BookCategory>
       </div>

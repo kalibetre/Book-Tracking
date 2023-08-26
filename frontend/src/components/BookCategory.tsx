@@ -2,9 +2,9 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 
 export enum CategoryLevel {
-  ToRead = "To Read",
-  InProgress = "In Progress",
-  Completed = "Completed",
+  ToRead = "to-read",
+  InProgress = "in-progress",
+  Completed = "completed",
 }
 
 const CATEGORY_STYLES = {
