@@ -1,8 +1,8 @@
 "use client";
 import OptionIcon from "@/icons/OptionIcon";
 import React, { useState } from "react";
-import { CategoryLevel } from "./BookCategory";
 import MenuItem from "./MenuItem";
+import { CategoryLevel } from "./BookCategory";
 
 export type BookItem = {
   id: string;
@@ -52,7 +52,7 @@ const Book = (props: BookProps) => {
   const { book } = props;
 
   const menuItems = CATEGORY_MENUES[book.category].map((item) => (
-    <li>
+    <li key={item.label}>
       <MenuItem {...item} book={book} key={item.label} />
     </li>
   ));
