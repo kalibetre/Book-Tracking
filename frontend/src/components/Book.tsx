@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import MenuItem from "./MenuItem";
 import { CategoryLevel } from "./BookCategory";
 import { useBooks } from "@/hooks/useBooks";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export type BookItem = {
   id: string;
@@ -18,18 +20,32 @@ type BookProps = {
 
 const Book = (props: BookProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { deleteBook, updateBookCategory } = useBooks();
   const { book } = props;
+  const { deleteBook, updateBookCategory } = useBooks();
 
   const handleUpdate = (book: BookItem, category: CategoryLevel) => {
-    updateBookCategory({ ...book, category });
+    updateBookCategory({ ...book, category }, showUpdateActionToast);
+  };
+
+  const handleDelete = (book: BookItem) => {
+    deleteBook(book, showDeleteActionToast);
+  };
+
+  const showUpdateActionToast = (isSuccess: boolean) => {
+    if (isSuccess) toast.success("The book was updated successfuly!");
+    else toast.error("Faild to update the book. Please try again!");
+  };
+
+  const showDeleteActionToast = (isSuccess: boolean) => {
+    if (isSuccess) toast.success("The book was deleted successfuly!");
+    else toast.error("Faild to delete the book. Please try again!");
   };
 
   const inProgressMenuAction = {
     label: "Move To In Progress",
     onClick: (book: BookItem) => handleUpdate(book, CategoryLevel.InProgress),
   };
-  const deleteMenuAction = { label: "Delete", onClick: deleteBook };
+  const deleteMenuAction = { label: "Delete", onClick: handleDelete };
   const markAsCompleteMenuAction = {
     label: "Mark as Complete",
     onClick: (book: BookItem) => handleUpdate(book, CategoryLevel.Completed),
@@ -87,6 +103,7 @@ const Book = (props: BookProps) => {
           </ul>
         </>
       )}
+      <ToastContainer />
     </div>
   );
 };

@@ -2,6 +2,8 @@
 import { useBooks } from "@/hooks/useBooks";
 import AddIcon from "@/icons/AddIcon";
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const NewBookForm = () => {
   const [bookTitle, setBookTitle] = useState("");
@@ -21,13 +23,18 @@ const NewBookForm = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(bookTitle);
     if (!bookTitle) {
       setError("Please enter a book title");
       return;
     }
     setError(null);
-    addNewBook(bookTitle);
+    addNewBook(bookTitle, showToast);
+    setBookTitle("");
+  };
+
+  const showToast = (isSuccess: boolean) => {
+    if (isSuccess) toast.success("Successfully saved your book!");
+    else toast.error("Error occred while trying to save your book!");
   };
 
   return (
@@ -60,6 +67,7 @@ const NewBookForm = () => {
           </div>
         </div>
       )}
+      <ToastContainer />
     </form>
   );
 };
