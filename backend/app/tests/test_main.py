@@ -2,17 +2,18 @@ import sqlite3
 import uuid
 from fastapi.testclient import TestClient
 from fastapi import status
+from app.db.statements import BookTablePreparedStatement
 from app.main import app, get_book_service
 from app.models.book import Book
+from app.repositories.bookrepository import BookRepository
 from app.services.bookservice import BookService
-from app.tests.utils.inmemoryrepository import InMemoryRepository
 
 
 def override_get_book_service():
     try:
         connection = sqlite3.connect(":memory:")
         prepare_db(connection)
-        repository = InMemoryRepository(connection=connection)
+        repository = BookRepository(connection=connection, placeholder="?")
         book_service = BookService(repository)
         yield book_service
     finally:
@@ -32,11 +33,12 @@ SAMPLE_BOOKS = [
 
 def prepare_db(connection: sqlite3.Connection):
     cursor = connection.cursor()
-    cursor.execute("DROP TABLE IF EXISTS books")
-    cursor.execute("CREATE TABLE books (id VARCHAR(50) PRIMARY KEY, title TEXT, category VARCHAR(20))")
+    stm = BookTablePreparedStatement("?")
+    cursor.execute(stm.drop_statement())
+    cursor.execute(stm.create_table_statement())
     
     for book in SAMPLE_BOOKS:
-        cursor.execute("INSERT INTO books (id, title, category) VALUES (?, ?, ?)", (str(book.id), book.title, book.category.value))
+        cursor.execute(stm.insert_statement(), (str(book.id), book.title, book.category.value))
 
     connection.commit()
 
