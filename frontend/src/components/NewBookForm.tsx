@@ -52,12 +52,12 @@ const NewBookForm = () => {
         />
         <button
           type="submit"
-          className="flex h-full w-32 items-center justify-center gap-2 rounded-md bg-cyan-700 p-2 px-4 text-sm text-white hover:bg-cyan-600"
+          className="flex h-full w-24 items-center justify-center gap-2 rounded-md bg-cyan-800/80 p-2 px-4 text-sm text-white hover:bg-cyan-700"
         >
           <span className="h-4 w-4">
             <AddIcon />
           </span>
-          Add New
+          New
         </button>
       </div>
       {error && (
