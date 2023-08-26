@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.db.bookrepositoryimpl import BookRepositoryImpl
 from app.db.util import get_db_connection
 from app.models.book import Book, BookUpdateRequest, NewBookRequest
-from app.utils.exceptions import BookNotFoundException
+from app.utils.exceptions import BookNotFoundException, BookTitleAlreadyTaken
 from app.services.bookservice import BookService
 import os
 
@@ -34,9 +34,12 @@ def get_book_service():
 
 @app.post("/books", response_model=Book, status_code=status.HTTP_201_CREATED)
 def create_book(book: NewBookRequest, book_service: BookService = Depends(get_book_service)):
-    if len(book.title) == 0:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Title is required")
-    return book_service.create_book(book)
+    try:
+        if len(book.title) == 0:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Title is required")
+        return book_service.create_book(book)
+    except BookTitleAlreadyTaken:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Book with the same title exsits")
 
 
 @app.get("/books", response_model=List[Book])

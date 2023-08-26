@@ -5,6 +5,7 @@ from app.db.statements import BookTablePreparedStatement
 from app.models.book import Book
 from app.models.bookcategory import BookCategory
 from app.repositories.bookrepository import BookRepository
+from app.utils.exceptions import BookTitleAlreadyTaken
 
 class BookRepositoryImpl(BookRepository):
     def __init__(self, connection, placeholder = '%s'):
@@ -22,6 +23,9 @@ class BookRepositoryImpl(BookRepository):
         if _book:
             cur.execute(self._stm.update_statement(), (book.title, book.category.value, str(book.id)))
         else:
+            _book = self.find_one_by_title(book.title)
+            if _book:
+                raise BookTitleAlreadyTaken
             cur.execute(self._stm.insert_statement(), (str(book.id), book.title, book.category.value))
 
         self._conn.commit()

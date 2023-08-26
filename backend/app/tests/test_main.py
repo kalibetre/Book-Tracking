@@ -51,6 +51,11 @@ def test_create_book():
     assert is_valid_uuid(book["id"])
 
 
+def test_book_with_same_title_should_not_be_allowed():
+    response = client.post("/books", json={"title": SAMPLE_BOOKS[0].title})
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
 def test_create_book_returns_400_for_empty_title():
     response = client.post("/books", json={"title": ""})
     assert response.status_code == status.HTTP_400_BAD_REQUEST
