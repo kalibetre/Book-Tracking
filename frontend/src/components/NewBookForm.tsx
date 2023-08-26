@@ -28,13 +28,13 @@ const NewBookForm = () => {
       return;
     }
     setError(null);
-    addNewBook(bookTitle, showToast);
+    addNewBook(bookTitle, showErrorMessage);
     setBookTitle("");
+    toast.success("Successfully saved your book!");
   };
 
-  const showToast = (isSuccess: boolean) => {
-    if (isSuccess) toast.success("Successfully saved your book!");
-    else toast.error("Error occred while trying to save your book!");
+  const showErrorMessage = (msg: string) => {
+    toast.error(msg);
   };
 
   return (

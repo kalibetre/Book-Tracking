@@ -13,41 +13,38 @@ const bookApi = axios.create({
 export const useBooks = () => {
     const { data, error, isLoading  } = useSWR(booksUrl, axiosFetcher);
 
-    const addNewBook = async (title: string, callback: (success: boolean) => void) => {
+    const addNewBook = async (title: string, errCallback: (msg: string) => void) => {
         try {
             mutate(booksUrl, [...data, { id: data.length + 1, title, category: CategoryLevel.ToRead }], false)
             await bookApi.post('/', { title })
             mutate(booksUrl)
-            callback(true)
         } catch (error) {
             mutate(booksUrl, data)
-            callback(false)
+            errCallback("Faild to add the new book. Please try again!")
         }
     }
 
-    const deleteBook = async (book: BookItem, callback: (success: boolean) => void) => {
+    const deleteBook = async (book: BookItem, errCallback: (msg: string) => void) => {
         try {
             mutate(booksUrl, data.filter((b: BookItem) => b.id !== book.id), {
                 rollbackOnError: true
             })
             await bookApi.delete(`/${book.id}`)
             mutate(booksUrl)
-            callback(true)
         } catch (error) {
             mutate(booksUrl, data)
-            callback(false)
+            errCallback("Faild to delete the book. Please try again!")
         }
     }
 
-    const updateBookCategory = async (book: BookItem, callback: (success: boolean) => void) => {
+    const updateBookCategory = async (book: BookItem, errCallback: (msg: string) => void) => {
         try {
             mutate(booksUrl, [...data.filter((b: BookItem) => b.id !== book.id), book], false)
             await bookApi.put(`/${book.id}`, { category: book.category })
             mutate(booksUrl)
-            callback(true)
         } catch (error) {
             mutate(booksUrl, data)
-            callback(false)
+            errCallback("Faild to update the book. Please try again!")
         }
     }
     

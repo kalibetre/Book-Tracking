@@ -24,21 +24,17 @@ const Book = (props: BookProps) => {
   const { deleteBook, updateBookCategory } = useBooks();
 
   const handleUpdate = (book: BookItem, category: CategoryLevel) => {
-    updateBookCategory({ ...book, category }, showUpdateActionToast);
+    updateBookCategory({ ...book, category }, showErrorMessage);
+    toast.success("The book was updated successfuly!");
   };
 
   const handleDelete = (book: BookItem) => {
-    deleteBook(book, showDeleteActionToast);
+    deleteBook(book, showErrorMessage);
+    toast.success("The book was deleted successfuly!");
   };
 
-  const showUpdateActionToast = (isSuccess: boolean) => {
-    if (isSuccess) toast.success("The book was updated successfuly!");
-    else toast.error("Faild to update the book. Please try again!");
-  };
-
-  const showDeleteActionToast = (isSuccess: boolean) => {
-    if (isSuccess) toast.success("The book was deleted successfuly!");
-    else toast.error("Faild to delete the book. Please try again!");
+  const showErrorMessage = (msg: string) => {
+    toast.error(msg);
   };
 
   const inProgressMenuAction = {
