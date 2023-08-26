@@ -1,13 +1,27 @@
 from typing import List
 import uuid
 from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from app.db.bookrepositoryimpl import BookRepositoryImpl
 from app.db.util import get_db_connection
 from app.models.book import Book, BookUpdateRequest, NewBookRequest
 from app.utils.exceptions import BookNotFoundException
 from app.services.bookservice import BookService
+import os
 
 app = FastAPI()
+
+origins = [
+    os.environ.get("FRONTEND_URL")
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_book_service():
     try:
