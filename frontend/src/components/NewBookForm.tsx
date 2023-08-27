@@ -48,10 +48,14 @@ const NewBookForm = () => {
           placeholder="Search..."
           value={bookTitle}
           onChange={handleBookTitleChange}
+          id="book-title"
+          role="book title input"
         />
         <button
           type="submit"
           className="flex h-full w-24 items-center justify-center gap-2 rounded-md bg-cyan-800/80 p-2 px-4 text-sm text-white hover:bg-cyan-700"
+          role="button"
+          id="add-book-button"
         >
           <span className="h-4 w-4">
             <AddIcon />

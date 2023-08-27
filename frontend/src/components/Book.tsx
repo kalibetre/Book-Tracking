@@ -74,9 +74,11 @@ const Book = (props: BookProps) => {
   ));
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full" id="book">
       <div className="relative z-0 flex w-full select-none flex-row rounded-sm bg-white p-3 ring-1 ring-slate-200 drop-shadow-sm">
-        <p className="flex-1 pt-1">{book.title}</p>
+        <p className="flex-1 pt-1" role="book-title">
+          {book.title}
+        </p>
         <button
           className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-slate-100"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -92,7 +94,10 @@ const Book = (props: BookProps) => {
             className="fixed inset-0 z-30 h-full w-full"
             onClick={() => setMenuOpen(false)}
           />
-          <ul className="absolute right-1 top-1 z-50 flex flex-col gap-2 rounded-md bg-white p-2 shadow-xl ring-1 ring-slate-200">
+          <ul
+            role="menu"
+            className="absolute right-1 top-1 z-50 flex flex-col gap-2 rounded-md bg-white p-2 shadow-xl ring-1 ring-slate-200"
+          >
             {menuItems}
           </ul>
         </>

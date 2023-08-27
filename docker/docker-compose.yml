@@ -34,5 +34,17 @@ services:
       - backend
     command: npm run dev
 
+  cypress:
+    image: "cypress/included:3.4.0"
+    depends_on:
+      - frontend
+    working_dir: /e2e
+    ipc: host
+    network_mode: host
+    environment:
+      - CYPRESS_baseUrl=http://localhost:3000
+    volumes:
+      - ../frontend/e2e:/e2e
+
 volumes:
   db-data:
